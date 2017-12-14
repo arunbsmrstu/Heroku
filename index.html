@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Hello, world!</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  </head>
+  <body>
+    <h1 class= "text-center">Hello, world!</h1>
+    <div class="container fluid">
+        <h2>Heading tag</h2>
+        <p>Hello Arun</p>
+        <ul>
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+        </ul>
+        <button class="btn btn-primary">Click</button>
+        <p id="ppm"></p>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/377669/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Temperature&type=line"></iframe>
+
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/377669/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Light&type=line"></iframe>
+
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/377669/charts/3?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Sound&type=line"></iframe>
+
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/377669/maps/channel_show"></iframe>
+
+
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            socket.emit('subscribe',{topic: 'arun'});
+        });
+        var socket = io.connect('http://localhost:3000');
+        socket.on('connect',function(){
+            socket.on('mqtt',function(msg){
+                console.log(msg.topic+' '+msg.payload);
+                if(msg.topic == 'arun'){
+                    var value = JSON.parse(msg.payload);
+                    //$(did).text("Alpha");
+                    $(ppm).text(value.ppm);
+                    //$(perc).text(value.perc);
+                    //$(ltime).text(value.ltime);
+                }
+            });
+            socket.emit('subscribe',{topic: 'arun'});
+        });
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  
+</body>
+</html>
